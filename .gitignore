@@ -1,4 +1,5 @@
 *.exe
 *.inp
+*.o
 .vscode/
 .gitignore
