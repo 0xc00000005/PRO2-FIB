@@ -30,7 +30,7 @@ int punto_verde(int num_emp, queue<int>& c){
 	return *max_element(tiempoEmpleado.begin(), tiempoEmpleado.end());
 
 }
-
+/*
 template <typename T>
 T read() {
 	T n;
@@ -57,3 +57,4 @@ int main() {
 	}
 	return 0;
 }
+*/

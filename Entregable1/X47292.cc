@@ -9,7 +9,7 @@ void sort_stack(stack<int>& inicial, stack<int>& ordenado) {
 		inicial.pop();
 		// Si hay algo en la ordenada y el elemento que hemos cogido es mayor
 		// Volvemos a ponerlo en la inicial y vaciamos la ordenada
-		while (not ordenado.empty() and ordenado.top() < elem) {
+		while (not ordenado.empty() and ordenado.top() > elem) {
 			inicial.push(ordenado.top());
 			ordenado.pop();
 		}
@@ -19,6 +19,7 @@ void sort_stack(stack<int>& inicial, stack<int>& ordenado) {
 		// menor que el que ya estaba, oredeando la pila
 	}
 }
+/*
 
 void leer(stack<int>& p) {
 	int n;
@@ -62,3 +63,4 @@ int main() {
 
 	return 0;
 }
+*/
