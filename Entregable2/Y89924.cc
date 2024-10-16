@@ -44,6 +44,8 @@ void final_estudiants(ML &l){
     for (const auto& pair : l) {
         if (!pair.second.empty()){
         cout << pair.first;
+        // Se usa auto& para deducir el tipo de de elemento, y & para acceder por referencia
+        // por motivos de eficiencia ya que son estructuras complejas
         for (const auto& assignatura : pair.second) {
             cout << " " << assignatura;
         }
