@@ -24,9 +24,12 @@ BinTree<int> crear_arbol(const vector<int>& in, const vector<int>& pos, int& pos
 }
 
 BinTree<int> construir_arbol(const vector<int>& in, const vector<int>& pos) {
+    // Posicion raiz en posOrden
     int posIndex = pos.size() - 1;
+    // Se crea un mapa que realaciona valor de inorden con su posicion
     unordered_map<int, int> inMap;
     for (int i = 0; i < in.size(); ++i) {
+        // inMap[valor]= posicion
         inMap[in[i]] = i;
     }
     return crear_arbol(in, pos, posIndex, 0, in.size() - 1, inMap);
@@ -49,7 +52,6 @@ int main() {
         }
         // Post: el inordre i el postordre es troben ordenats en el vector.
         BinTree<int> t = construir_arbol(inordre, postordre);
-        // Assuming setOutputFormat and operator<< are implemented for BinTree
         t.setOutputFormat(format=="INLINEFORMAT"?  BinTree<int>::INLINEFORMAT : BinTree<int>::VISUALFORMAT);
         cout << t << endl;
     }
