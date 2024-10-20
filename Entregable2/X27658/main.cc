@@ -5,28 +5,31 @@
 #include "BinTree.hh"
 using namespace std;
 
-BinTree<int> crear_arbol(const vector<int>& in, const vector<int>& pos, int& posIndex, int inStart, int inEnd, unordered_map<int, int>& inMap) {
-    // Si el rango es invalido, retornar un árbol vacío
-    if (inStart > inEnd) return BinTree<int>();
+typedef BinTree<int> BT;
 
+BT crear_arbol(const vector<int>& in, const vector<int>& pos, int& posIndex, int inStart, int inEnd, unordered_map<int, int>& inMap) {
+    // Si el rango es invalido, retornar un árbol vacío
+    // Es decir, ya no hay más nodos que procesar
+    if (inStart > inEnd) return BT();
     // Obtener el valor de la raiz actual desde pos usando posIndex
     int raiz = pos[posIndex--];
-
     // Encontrar la posicion de la raiz en el vector in usando inMap
     int inIndex = inMap[raiz];
-
     // Construir el subarbol derecho primero, luego el izquierdo
-    BinTree<int> right = crear_arbol(in, pos, posIndex, inIndex + 1, inEnd, inMap);
-    BinTree<int> left = crear_arbol(in, pos, posIndex, inStart, inIndex - 1, inMap);
-
+    BT right = crear_arbol(in, pos, posIndex, inIndex + 1, inEnd, inMap);
+    // Al estar posIndex apuntado por REFERENCIA, se consumen todos los elementos del subarbol derecho
+    // antes de pasar al subarbol izquierdo, como especifica el posorden.
+    // El mismo concepto se aplica en las llamadas recursivas, con un indice cada vez menor.
+    BT left = crear_arbol(in, pos, posIndex, inStart, inIndex - 1, inMap);
     // Crear el árbol con la raíz y los subárboles izquierdo y derecho
-    return BinTree<int>(raiz, left, right);
+    return BT(raiz, left, right);
 }
 
-BinTree<int> construir_arbol(const vector<int>& in, const vector<int>& pos) {
+BT construir_arbol(const vector<int>& in, const vector<int>& pos) {
     // Posicion raiz en posOrden
     int posIndex = pos.size() - 1;
     // Se crea un mapa que realaciona valor de inorden con su posicion
+    // El vector no se usa para acceder a los valores, sino para delimitar inStart, inEnd.
     unordered_map<int, int> inMap;
     for (int i = 0; i < in.size(); ++i) {
         // inMap[valor]= posicion
@@ -51,8 +54,8 @@ int main() {
             cin >> postordre[i];
         }
         // Post: el inordre i el postordre es troben ordenats en el vector.
-        BinTree<int> t = construir_arbol(inordre, postordre);
-        t.setOutputFormat(format=="INLINEFORMAT"?  BinTree<int>::INLINEFORMAT : BinTree<int>::VISUALFORMAT);
+        BT t = construir_arbol(inordre, postordre);
+        t.setOutputFormat(format=="INLINEFORMAT"?  BT::INLINEFORMAT : BT::VISUALFORMAT);
         cout << t << endl;
     }
 }
