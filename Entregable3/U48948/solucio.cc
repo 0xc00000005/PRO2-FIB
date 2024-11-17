@@ -16,42 +16,27 @@ int Cjt_estudiants::posicio_nota(double nota_b) const {
 void Cjt_estudiants::afegir_estudiant(const Estudiant& est, bool& trobat) {
   int dni = est.consultar_DNI();
   trobat = false;
-  int pos;
+  int pos = cerca_lineal_per_dni(vest, 0, nest - 1, dni);
 
-  if (est.te_nota()) {
-    // Search in the range of students with grades
-    pos = cerca_dicot_per_dni(vest, primer_est_amb_nota, nest - 1, dni);
-    if (pos < nest && vest[pos].consultar_DNI() == dni) {
-      trobat = true;
-    } else {
-      // Shift elements to the right to make space for the new student
-      for (int i = nest; i > pos; --i) {
-        vest[i] = vest[i - 1];
-      }
-      vest[pos] = est;
-      ++nest;
-    }
+  if (pos < nest && vest[pos].consultar_DNI() == dni) {
+    trobat = true;
   } else {
-    // Search in the range of students without grades
-    pos = cerca_dicot_per_dni(vest, 0, primer_est_amb_nota - 1, dni);
-    if (pos < primer_est_amb_nota && vest[pos].consultar_DNI() == dni) {
-      trobat = true;
-    } else {
-      // Shift elements to the right including students with grades
-      for (int i = nest; i > pos; --i) {
-        vest[i] = vest[i - 1];
-      }
-      vest[pos] = est;
-      ++nest;
-      ++primer_est_amb_nota; // Update the index of first student with grade
+    for (int i = nest; i > pos; --i) {
+      vest[i] = vest[i - 1];
     }
+    vest[pos] = est;
+    ++nest;
+    if (!est.te_nota()) {
+      ++primer_est_amb_nota;
+    }
+    ordenar();
   }
 }
 
 void Cjt_estudiants::escriure_i(double nota_i, double nota_s) const {
   int i = posicio_nota(nota_i);
   while (i < nest) {
-    if (vest[i].te_nota() && vest[i].consultar_nota() <= nota_s) { // Check if the student has a grade and if the grade is within the range
+    if (vest[i].te_nota() && vest[i].consultar_nota() <= nota_s) { 
       vest[i].escriure();
     }
     ++i;
