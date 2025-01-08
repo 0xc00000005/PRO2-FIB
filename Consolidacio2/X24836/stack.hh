@@ -93,11 +93,13 @@ public:
   }
 
   void push(T value) {
+    if(ptopitem == nullptr or value > ptopitem->value){
     Item *pnewitem = new Item();
     pnewitem->value = value;
     pnewitem->next = ptopitem;
     ptopitem = pnewitem;
     _size++;
+    }
   }
   
   void pop() {
