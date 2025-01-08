@@ -154,18 +154,25 @@ public:
   //       afegit amb push_mark, o bé la pila és buida.
   //       En particular, si el cim de la pila ja tenia un element marcat, no s'ha eliminat res.
   // Descomenteu les següents dues linies i implementeu el mètode:
-  void pop_mark() {
-    if (ptopitem == NULL) {
-      cerr << "Error: pop on empty stack" << endl;
-      exit(1);
-    }
+  /*void pop_mark() {
+    if (ptopitem != NULL) {
     Item *paux = ptopitem;
     while(!(ptopitem->marked) or ptopitem==NULL){
     ptopitem = ptopitem->next;
     delete paux;
     _size--;
     }
+    }
   }
+  */
+ void pop_mark() {
+    while (ptopitem != nullptr && !ptopitem->marked) {
+        Item *toDelete = ptopitem;
+        ptopitem = ptopitem->next;
+        delete toDelete;
+        _size--;
+    }
+}
   
 };
 
