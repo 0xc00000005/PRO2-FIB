@@ -12,8 +12,7 @@ private:
   struct Item {
     T value;
     Item* next;
-    // Afegeix el que calgui per a poder recordar si un element està marcat.
-    // ...
+    bool marked;
   };
 
   // Data:
@@ -99,6 +98,7 @@ public:
     Item *pnewitem = new Item();
     pnewitem->value = value;
     pnewitem->next = ptopitem;
+    pnewitem->marked = false;
     ptopitem = pnewitem;
     _size++;
   }
@@ -138,9 +138,14 @@ public:
   // Pre:
   // Post: S'afegeix value al cim de la pila, com a element marcat.
   // Descomenteu les següents dues linies i implementeu el mètode:
-  // void push_mark(T value) {
-  // ...
-  // }
+  void push_mark(T value) {
+    Item *pnewitem = new Item();
+    pnewitem->value = value;
+    pnewitem->next = ptopitem;
+    pnewitem->marked = true;
+    ptopitem = pnewitem;
+    _size++;
+  }
 
 
   // Pre: 
@@ -149,9 +154,18 @@ public:
   //       afegit amb push_mark, o bé la pila és buida.
   //       En particular, si el cim de la pila ja tenia un element marcat, no s'ha eliminat res.
   // Descomenteu les següents dues linies i implementeu el mètode:
-  // void pop_mark() {
-  // ...
-  // }
+  void pop_mark() {
+    if (ptopitem == NULL) {
+      cerr << "Error: pop on empty stack" << endl;
+      exit(1);
+    }
+    Item *paux = ptopitem;
+    while(!(ptopitem->marked) or ptopitem==NULL){
+    ptopitem = ptopitem->next;
+    delete paux;
+    _size--;
+    }
+  }
   
 };
 
