@@ -12,6 +12,8 @@ private:
   struct Item {
     T value;
     Item* next;
+    // Afegeix el que calgui per a poder recordar si un element està marcat.
+    // ...
   };
 
   // Data:
@@ -92,6 +94,7 @@ public:
     return ptopitem == NULL;
   }
 
+  // Modifica aquesta funció per a recordar que l'element afegit no està marcat.
   void push(T value) {
     Item *pnewitem = new Item();
     pnewitem->value = value;
@@ -132,102 +135,23 @@ public:
   template <typename U> friend ostream &operator<<(ostream &os, const Stack<U> &s);
   template<typename U> friend istream &operator>>(istream &is, Stack<U> &s);
     
-  // Pre:  Sigui [a1,...,an] el contingut del paràmetre implícit (des del fons fins al cim).
-  //       Sigui [b1,...,bm] el contingut de s.
-  //       k>=0.
-  // Post: En el cas en que k>=m, aquest és el resultat:
-  //          [a1,...,an,b1,...,bm] és el contingut del paràmetre implícit.
-  //          [] és el contingut de s.
-  //       En canvi, en el cas k<m, aquest és el resultat:
-  //          [a1,...,an,b{m-k+1},...,bm] és el contingut del paràmetre implícit.
-  //          [b1,...,b{m-k}] és el contingut de s.
+  // Pre:
+  // Post: S'afegeix value al cim de la pila, com a element marcat.
   // Descomenteu les següents dues linies i implementeu el mètode:
-  void take(Stack<T> &s, int k) {
-    if (k == 0 || s.ptopitem == nullptr) return;
+  // void push_mark(T value) {
+  // ...
+  // }
 
-    // Case: move all
-    if (k >= s._size) {
-        // Find bottom of s
-        Item *p = s.ptopitem;
-        while (p->next != nullptr) p = p->next;
-        // Link bottom of s to top of this
-        p->next = ptopitem;
-        ptopitem = s.ptopitem;
-        _size += s._size;
-        s.ptopitem = nullptr;
-        s._size = 0;
-        return;
-    }
 
-    // Case: move exactly k elements
-    Item *oldTop = s.ptopitem;
-    Item *prev = nullptr;
-    Item *node = oldTop;
-    for (int i = 0; i < k && node != nullptr; i++) {
-        prev = node;
-        node = node->next;
-    }
-    // 'prev' is now the last of the k moved items
-    // 'node' is the new top of s
-    prev->next = nullptr;
-    s.ptopitem = node;
-
-    s._size -= k;
-    _size += k;
-
-    // Attach sublist [oldTop..prev] on top of this
-    Item *bottomSub = oldTop;
-    // Find the bottom of that sublist
-    // but here, bottomSub is the top of the sublist
-    while (bottomSub->next != nullptr) {
-        bottomSub = bottomSub->next;
-    }
-    bottomSub->next = ptopitem;
-    ptopitem = oldTop;
-  }
-  void Stack<T>::take(Stack<T> &s, int k) {
-  if (k == 0 || s.ptopitem == nullptr) return;
-
-  // Case: move all
-  if (k >= s._size) {
-      // Find bottom of s
-      Item *p = s.ptopitem;
-      while (p->next != nullptr) p = p->next;
-      // Link bottom of s to top of this
-      p->next = ptopitem;
-      ptopitem = s.ptopitem;
-      _size += s._size;
-      s.ptopitem = nullptr;
-      s._size = 0;
-      return;
-  }
-
-  // Case: move exactly k elements
-  Item *oldTop = s.ptopitem;
-  Item *prev = nullptr;
-  Item *node = oldTop;
-  for (int i = 0; i < k && node != nullptr; i++) {
-      prev = node;
-      node = node->next;
-  }
-  // 'prev' is now the last of the k moved items
-  // 'node' is the new top of s
-  prev->next = nullptr;
-  s.ptopitem = node;
-
-  s._size -= k;
-  _size += k;
-
-  // Attach sublist [oldTop..prev] on top of this
-  Item *bottomSub = oldTop;
-  // Find the bottom of that sublist
-  // but here, bottomSub is the top of the sublist
-  while (bottomSub->next != nullptr) {
-      bottomSub = bottomSub->next;
-  }
-  bottomSub->next = ptopitem;
-  ptopitem = oldTop;
-  }
+  // Pre: 
+  // Post: S'han eliminat del cim de la pila el mínim nombre d'elements necessaris
+  //       per tal de garantir que o bé el cim de la pila té un element que va ser
+  //       afegit amb push_mark, o bé la pila és buida.
+  //       En particular, si el cim de la pila ja tenia un element marcat, no s'ha eliminat res.
+  // Descomenteu les següents dues linies i implementeu el mètode:
+  // void pop_mark() {
+  // ...
+  // }
   
 };
 
