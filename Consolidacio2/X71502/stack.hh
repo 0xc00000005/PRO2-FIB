@@ -143,92 +143,59 @@ public:
   //          [b1,...,b{m-k}] és el contingut de s.
   // Descomenteu les següents dues linies i implementeu el mètode:
   void take(Stack<T> &s, int k) {
+    // Si k es cero o la pila 's' está vacía, no hay nada que mover
     if (k == 0 || s.ptopitem == nullptr) return;
 
-    // Case: move all
+    // Caso: mover todos los elementos si k >= número de elementos en 's'
     if (k >= s._size) {
-        // Find bottom of s
+        // Se busca el fondo de la pila 's' avanzando hasta que next == nullptr
         Item *p = s.ptopitem;
         while (p->next != nullptr) p = p->next;
-        // Link bottom of s to top of this
+        // Se enlaza el fondo de la pila 's' con la cima (top) de la pila actual
         p->next = ptopitem;
+        // La cima de la pila actual pasa a ser la cima de 's'
         ptopitem = s.ptopitem;
+        // Se incrementa el tamaño con el total de 's'
         _size += s._size;
+        // Se vacía la pila 's'
         s.ptopitem = nullptr;
         s._size = 0;
         return;
     }
 
-    // Case: move exactly k elements
-    Item *oldTop = s.ptopitem;
-    Item *prev = nullptr;
-    Item *node = oldTop;
+    // Caso: mover exactamente k elementos de 's'
+    Item *oldTop = s.ptopitem;  // Referencia al nodo top de 's'
+    Item *prev = nullptr;       // Apuntador auxiliar para encontrar el nuevo top
+    Item *node = oldTop;        // Nodo explorado en el bucle
+
+    // Avanzamos k veces para dejar 'node' en el (k+1)-ésimo elemento
     for (int i = 0; i < k && node != nullptr; i++) {
-        prev = node;
-        node = node->next;
+        prev = node;        // 'prev' se queda en el último nodo visitado
+        node = node->next;  // 'node' avanza al siguiente
     }
-    // 'prev' is now the last of the k moved items
-    // 'node' is the new top of s
+    // En este punto, 'prev' apunta al k-ésimo nodo (último que se moverá)
+    // 'node' pasa a ser el nuevo top de 's' (el elemento que queda en 's')
+
+    // Se separa la sublista de k elementos en 's'
     prev->next = nullptr;
+    // Ajuste de la pila 's' para que su tope sea 'node'
     s.ptopitem = node;
 
+    // Ajustes de tamaño
     s._size -= k;
     _size += k;
 
-    // Attach sublist [oldTop..prev] on top of this
+    // Se adjunta la sublista [oldTop..prev] por encima de la pila actual
     Item *bottomSub = oldTop;
-    // Find the bottom of that sublist
-    // but here, bottomSub is the top of the sublist
+    // Se localiza el último nodo de la sublista que se movió
     while (bottomSub->next != nullptr) {
         bottomSub = bottomSub->next;
     }
+    // Se enlaza con la cima de la pila actual
     bottomSub->next = ptopitem;
+    // La sublista se convierte en la nueva cima
     ptopitem = oldTop;
-  }
-  void Stack<T>::take(Stack<T> &s, int k) {
-  if (k == 0 || s.ptopitem == nullptr) return;
-
-  // Case: move all
-  if (k >= s._size) {
-      // Find bottom of s
-      Item *p = s.ptopitem;
-      while (p->next != nullptr) p = p->next;
-      // Link bottom of s to top of this
-      p->next = ptopitem;
-      ptopitem = s.ptopitem;
-      _size += s._size;
-      s.ptopitem = nullptr;
-      s._size = 0;
-      return;
-  }
-
-  // Case: move exactly k elements
-  Item *oldTop = s.ptopitem;
-  Item *prev = nullptr;
-  Item *node = oldTop;
-  for (int i = 0; i < k && node != nullptr; i++) {
-      prev = node;
-      node = node->next;
-  }
-  // 'prev' is now the last of the k moved items
-  // 'node' is the new top of s
-  prev->next = nullptr;
-  s.ptopitem = node;
-
-  s._size -= k;
-  _size += k;
-
-  // Attach sublist [oldTop..prev] on top of this
-  Item *bottomSub = oldTop;
-  // Find the bottom of that sublist
-  // but here, bottomSub is the top of the sublist
-  while (bottomSub->next != nullptr) {
-      bottomSub = bottomSub->next;
-  }
-  bottomSub->next = ptopitem;
-  ptopitem = oldTop;
-  }
-  
+}
 };
 
 // Implementation of read and write:
